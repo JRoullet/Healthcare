@@ -11,7 +11,8 @@
 	<groupId>jroullet</groupId>
 	<artifactId>healthcare</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>healthcare</name>
+    <packaging>pom</packaging>
+    <name>healthcare</name>
 	<description>Doctor app  -&gt; diagnoses diabete probability according to patient&apos;s words</description>
 	<url/>
 	<licenses>
@@ -20,7 +21,10 @@
 	<developers>
 		<developer/>
 	</developers>
-	<scm>
+<!--    <modules>-->
+<!--        <module>docker-compose</module>-->
+<!--    </modules>-->
+    <scm>
 		<connection/>
 		<developerConnection/>
 		<tag/>
