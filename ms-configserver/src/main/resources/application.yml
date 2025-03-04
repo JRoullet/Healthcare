@@ -1,3 +1,14 @@
+## First Version - configuration files in the configserver microservice, internal path
+server:
+  port: 8888
 spring:
   application:
-    name: ms-configserver
+    name: configserver
+
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/configuration
+  profiles:
+    active: native
