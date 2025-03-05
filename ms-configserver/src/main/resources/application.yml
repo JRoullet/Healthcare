@@ -3,9 +3,10 @@ server:
   port: 8888
 spring:
   application:
-    name: configserver
+    name: config-server
   profiles:
     active: git
+#    active: native
   cloud:
     config:
       server:
@@ -15,7 +16,6 @@ spring:
           uri: https://github.com/JRoullet/Healthcare_config.git
           username: JRoullet
           password: ${GIT_PASSWORD}
-
           default-label: main
           timeout: 5
           clone-on-start: true

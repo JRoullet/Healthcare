@@ -1,30 +1,30 @@
-server:
-  port: 8080
-spring:
-  application:
-    name: ms-webapp
-  datasource:
-    url: jdbc:h2:mem:webapp
-#    url: jdbc:h2:file:./data/msaccounts
-    username: sa
-    password: sa
-    driver-class-name: org.h2.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-    defer-datasource-initialization: true
-    database-platform: org.hibernate.dialect.H2Dialect
-  h2:
-    console:
-      path: /h2-console
-      enabled: true
-#  sql:
-#    init:
-#      mode: never
-#      schema-locations: classpath:db/schema.sql
-#      data-locations: classpath:db/data.sql
+#server:
+#  port: 8080
+##spring:
+##  application:
+##    name: ms-webapp
+#  datasource:
+#    url: jdbc:h2:mem:webapp
+##    url: jdbc:h2:file:./data/msaccounts
+#    username: sa
+#    password: sa
+#    driver-class-name: org.h2.Driver
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#    defer-datasource-initialization: true
+#    database-platform: org.hibernate.dialect.H2Dialect
+#  h2:
+#    console:
+#      path: /h2-console
+#      enabled: true
+##  sql:
+##    init:
+##      mode: never
+##      schema-locations: classpath:db/schema.sql
+##      data-locations: classpath:db/data.sql

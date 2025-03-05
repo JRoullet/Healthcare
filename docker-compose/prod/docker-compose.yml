@@ -19,9 +19,8 @@ services:
     environment:
       GIT_PASSWORD_FILE: /run/secrets/git_password
 
-
   msdiscovery:
-    image: jroullet/msdiscovery:latest
+    image: jroullet/healthcare-ms-discovery:latest
     container_name: discovery-ms
     ports:
       - "8761:8761"
@@ -29,7 +28,7 @@ services:
       msconfigserver:
         condition: service_healthy
     healthcheck:
-      test: "curl --fail --silent localhost:8888/actuator/health/readiness | grep UP || exit 1"
+      test: "curl --fail --silent localhost:8761/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
       timeout: 5s
       retries: 10
@@ -37,16 +36,17 @@ services:
     extends:
       file: common-config.yml
       service: microservice-configserver-config
-    environment:
-      SPRING_APPLICATION_NAME: "msdiscovery"
+#    environment:
+#      SPRING_APPLICATION_NAME: msdiscovery
+#      SERVER_PORT: 8761
 
   mswebapp:
-    image: jroullet/mswebapp:latest
-    mem_limit: 700m
+    image: jroullet/healthcare-ms-webapp:latest
+    container_name: webapp-ms
     ports:
       - "8080:8080"
     networks:
-      - bankapplication
+      - healthcare
     depends_on:
       - msconfigserver
       - msdiscovery
@@ -61,9 +61,9 @@ services:
       SPRING_CONFIG_IMPORT: configserver:http://msconfigserver:8888/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://msdiscovery:8761/eureka/
 
-#secrets:
-#  git_password:
-#    file: ./git_password.txt
+secrets:
+  git_password:
+    file: ./git_password.txt
 
 networks:
   healthcare:

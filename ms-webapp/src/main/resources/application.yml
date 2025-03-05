@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ms-discovery
+    name: ms-web-app
   config:
     import:
       configserver:http://localhost:8888/
