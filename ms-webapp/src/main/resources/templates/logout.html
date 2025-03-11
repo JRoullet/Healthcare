@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home Page</title>
+    <link th:href="@{css/mdb.min.css}" rel="stylesheet"/>
+    <link th:href="@{css/index.css}" rel="stylesheet"/>
+</head>
+<body>
+<section class="vh-100" style="background-color: #508bfc;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+
+                        <div class="logo-card">
+                            <img class="w-100" th:src="@{/css/images/logo.png}" alt="Logo" />
+                        </div>
+
+
+                        <div class="mb-3 row">
+                            <div class="card-title text-center mb-5 fw-bold fs-5">
+                                <H3> Vous êtes déconnecté</H3>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary btn-lg px-5 shadow-2" onclick="window.location.href='/signin'">Se connecter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

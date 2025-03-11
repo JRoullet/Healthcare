@@ -1,25 +1,28 @@
 server:
-  port: 8080
+  port: 8070
 spring:
   application:
-    name: "ms-webapp"
+    name: "ms-patient"
+  profiles:
+    active: "prod"
   datasource:
     url: jdbc:mysql://localhost:3308/patientdb
     username: "root"
     password: "root"
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    hibernate:
+      ddl-auto: create-drop
     show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
   sql:
     init:
       mode: always
-
-  #------ Imported config must be quite empty to avoid loosing time from a/r -----#
   config:
-    import:
-# Dans docker
-#      configserver:http://msconfigserver:8888/
-# Dans l'IDE
-      configserver:http://localhost:8888/
+    # Dans l'IDE
+    import: configserver:http://localhost:8888/
+      # Dans docker
+      #      configserver:http://msconfigserver:8888/
 
 #-----------EUREKA----------------
 #--------------Eureka Server----------------
@@ -38,5 +41,3 @@ management:
     web:
       exposure:
         include: "*"
-
-

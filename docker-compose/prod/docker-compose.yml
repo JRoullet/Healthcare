@@ -44,7 +44,7 @@ services:
     image: jroullet/healthcare-ms-webapp:latest
     container_name: webapp-ms
     ports:
-      - "8080:8080"
+      - "8090:8090"
     networks:
       - healthcare
     depends_on:
@@ -60,6 +60,37 @@ services:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://msconfigserver:8888/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://msdiscovery:8761/eureka/
+
+  mspatientdb:
+    container_name: patientdb
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_DATABASE: patientdb
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
+
+
+  mspatient:
+    image: jroullet/patient:latest
+    container_name: patient-ms
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_NAME: "mspatient"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mspatientdb:3306/patientdb"
+    depends_on:
+      msconfigserver:
+        condition: service_healthy
+      msdiscovery:
+        condition: service_healthy
+      mspatientdb:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-discovery-config
+
 
 secrets:
   git_password:
