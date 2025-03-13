@@ -1,17 +1,13 @@
 package jroullet.mswebapp.security.config;
 
-import jroullet.mswebapp.service.AuthenticationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -39,7 +35,6 @@ public class SpringSecurityConfig {
 //                        .loginProcessingUrl("/authentication") // To go through your postmapping /authentication with spring security own means
                         // username is default field and is changed here (=> checked field in the HTML form login page)
                         .permitAll()
-//                        .usernameParameter("email")
                         // when successful, goes to "/" URL, => always
                         .defaultSuccessUrl("/home", true)
                         // Add an error code to the URL when login fails
@@ -59,10 +54,11 @@ public class SpringSecurityConfig {
 //        return new AuthenticationService();
 //    }
 
-    @Bean
-    AuthenticationManager authenticationManager(HttpSecurity http, AuthenticationService authenticationService) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(authenticationService).passwordEncoder(passwordEncoder());
-        return authenticationManagerBuilder.build();
-    }
+//    // SPRING SECURITY OWN MANAGEMENT
+//    @Bean
+//    AuthenticationManager authenticationManager(HttpSecurity http, AuthenticationService authenticationService) throws Exception {
+//        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+//        authenticationManagerBuilder.userDetailsService(authenticationService).passwordEncoder(passwordEncoder());
+//        return authenticationManagerBuilder.build();
+//    }
 }

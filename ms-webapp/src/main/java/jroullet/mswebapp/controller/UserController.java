@@ -39,10 +39,14 @@ public class UserController {
         return new ModelAndView ("home", "user", user);
     }
 
+    // SPRING SECURITY OWN MANAGEMENT
     @GetMapping("/signin")
     public ModelAndView showSignInView() {
         return new ModelAndView ("signin", "signInForm", new SignInForm());
     }
+
+
+    // Managing Authentication Manually, but we lose protecting benefits of spring security
 
 
     @PostMapping("/authentication")
@@ -60,11 +64,9 @@ public class UserController {
                 return new ModelAndView("signin", "signInForm", form)
                         .addObject("authError", "Email not found");
             }
-            boolean isAuthenticated = userService.isAuthenticated(form.getUsername(), form.getPassword());
+            User user = optionalUser.get();
 
-            if (isAuthenticated) {
-                User user = optionalUser.get();
-
+            if(userService.isAuthenticated(form.getUsername(), form.getPassword())){
                 // Authentication from User object
                 // UserDetails not needed
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -76,23 +78,22 @@ public class UserController {
                 ModelAndView modelAndView = new ModelAndView("home");
                 modelAndView.addObject("user", user);
                 return modelAndView;
-
             } else {
                 return new ModelAndView("signin", "signInForm", form)
                         .addObject("authError", "Invalid password");
             }
         }
-            catch(UsernameNotFoundException e){
-                logger.info("User not found: " + form.getUsername());
-                return new ModelAndView("signin", "signInForm", form)
-                        .addObject("authError","Email not found");
+        catch(UsernameNotFoundException e){
+            logger.info("User not found: " + form.getUsername());
+            return new ModelAndView("signin", "signInForm", form)
+                    .addObject("authError","Email not found");
 
-            }
-            catch(Exception e){
-                logger.error("Error during authentication", e);
-                return new ModelAndView("signin", "signInForm", form)
-                        .addObject("authError", "An error occurred during authentication");
-            }
+        }
+        catch(Exception e){
+            logger.error("Error during authentication", e);
+            return new ModelAndView("signin", "signInForm", form)
+                    .addObject("authError", "An error occurred during authentication");
+        }
     }
 
     @GetMapping("/signup")
@@ -123,16 +124,6 @@ public class UserController {
     public ModelAndView showLogout() {
         return new ModelAndView ("logout");
     }
-
-//    @GetMapping("/delete-toto-users")
-//    public String deleteTotoUsers() {
-//        try {
-//            userService.deleteTotoUsers();
-//            return "redirect:/account?success=true"; // redirige vers une page de succès
-//        } catch (Exception e) {
-//            return "redirect:/account?error=true"; // redirige vers une page d'erreur en cas de problème
-//        }
-//    }
 
 
 }
