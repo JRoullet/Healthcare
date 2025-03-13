@@ -40,3 +40,8 @@ services:
       start_period: 10s
     environment:
       MYSQL_ROOT_PASSWORD: root
+
+  microservice-mongo-config:
+    extends:
+      service:
+        network-deploy-service

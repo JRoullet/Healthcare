@@ -7,8 +7,8 @@
   <title>Sign up | Flash Cash</title>
 
   <!-- CSS Dependencies -->
-  <link th:href="@{css/mdb.min.css}" rel="stylesheet">
-  <link th:href="@{css/index.css}" rel="stylesheet">
+  <link th:href="@{css/mdb.min.css?v=1}" rel="stylesheet">
+  <link th:href="@{css/index.css?v=1}" rel="stylesheet">
 </head>
 
 <body class="signin-form">
@@ -20,13 +20,23 @@
           <div class="card-body p-5 text-center">
             <!-- Logo -->
             <div class="logo-card">
-              <img class="w-100 pb-3" th:src="@{/css/images/logo.png}" alt="Flash Cash Logo">
+              <img class="w-100 pb-3" th:src="@{/static/images/logo.png}" alt="Flash Cash Logo">
             </div>
 
             <h1 class="card-title h4 mb-5 fw-bold">Sign up</h1>
 
             <!-- Sign-up Form -->
             <form th:action="@{/signup}" method="post" th:object="${signUpForm}" class="needs-validation" novalidate>
+              <!-- Display error messages -->
+              <div th:if="${authError}" class="alert alert-danger" th:text="${authError}"></div>
+
+              <div th:if="${#fields.hasErrors('username')}" class="alert alert-danger">
+                <span th:each="err : ${#fields.errors('username')}" th:text="${err}"></span>
+              </div>
+              <div th:if="${#fields.hasErrors('password')}" class="alert alert-danger">
+                <span th:each="err : ${#fields.errors('password')}" th:text="${err}"></span>
+              </div>
+
               <div data-mdb-input-init class="form-outline mb-4">
                 <input
                         type="email"
@@ -37,12 +47,10 @@
 
                         autofocus>
 <!--                required-->
-                <div class="invalid-feedback text-start">
-                  Please enter your Email
-                </div>
-                <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger text-start"></div>
               </div>
-
+              <div class="invalid-feedback text-start">
+                Please enter your username
+              </div>
 
               <div data-mdb-input-init class="form-outline mb-4">
                 <input
@@ -59,7 +67,6 @@
                 <div class="invalid-feedback text-start">
                   The password must contain 8 characters, including an uppercase letter, a number, and a symbol
                 </div>
-                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger text-start"></div>
               </div>
 
               <button

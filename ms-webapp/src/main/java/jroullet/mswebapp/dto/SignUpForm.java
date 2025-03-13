@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class SignUpForm {
 
-    @NotEmpty(message = "Please enter your username")
+    @NotEmpty(message = "Please enter a username")
     private String username;
     @NotBlank(message = "Password is mandatory")
     private String password;

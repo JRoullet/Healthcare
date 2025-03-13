@@ -63,6 +63,7 @@ services:
 
   mspatientdb:
     container_name: patientdb
+
     ports:
       - "3308:3306"
     environment:
@@ -91,6 +92,17 @@ services:
       file: common-config.yml
       service: microservice-discovery-config
 
+  msmongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123
+    ports:
+      - "27018:27017"
+    extends:
+      file: common-config.yml
+      service: microservice-mongo-config
 
 secrets:
   git_password:

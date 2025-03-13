@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +44,7 @@ public class UserController {
         return new ModelAndView ("signin", "signInForm", new SignInForm());
     }
 
+
     @PostMapping("/authentication")
     public ModelAndView processSignIn(@Valid @ModelAttribute("signInForm") SignInForm form,
                                       BindingResult result){
@@ -50,37 +52,47 @@ public class UserController {
         if(result.hasErrors()){
             return new ModelAndView ("signin", "signInForm", form);
         }
+        try {
+            Optional<User> optionalUser = userService.findByUserName(form.getUsername());
 
-        Optional<User> optionalUser = userService.findByUserName(form.getUsername());
+            if (optionalUser.isEmpty()) {
+                logger.info("No such User: " + form.getUsername());
+                return new ModelAndView("signin", "signInForm", form)
+                        .addObject("authError", "Email not found");
+            }
+            boolean isAuthenticated = userService.isAuthenticated(form.getUsername(), form.getPassword());
 
-        if(optionalUser.isEmpty()){
-            logger.info("No such User: " + form.getUsername());
-            return new ModelAndView("signin","signInForm",form)
-                    .addObject("authError","Email not found");
+            if (isAuthenticated) {
+                User user = optionalUser.get();
+
+                // Authentication from User object
+                // UserDetails not needed
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                        user, null, Collections.emptyList());
+
+                // Update securityContextHolder
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                ModelAndView modelAndView = new ModelAndView("home");
+                modelAndView.addObject("user", user);
+                return modelAndView;
+
+            } else {
+                return new ModelAndView("signin", "signInForm", form)
+                        .addObject("authError", "Invalid password");
+            }
         }
+            catch(UsernameNotFoundException e){
+                logger.info("User not found: " + form.getUsername());
+                return new ModelAndView("signin", "signInForm", form)
+                        .addObject("authError","Email not found");
 
-        boolean isAuthenticated = userService.isAuthenticated(form.getUsername(), form.getPassword());
-
-        if (isAuthenticated) {
-            User user = optionalUser.get();
-
-            // Authentication from User object
-            // UserDetails not needed
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    user, null, Collections.emptyList());
-
-            // Update securityContextHolder
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            ModelAndView modelAndView = new ModelAndView("home");
-            modelAndView.addObject("user", user);
-            return modelAndView;
-
-        } else {
-            return new ModelAndView("signin", "signInForm", form)
-                    .addObject("authError","Invalid password");
-        }
-
+            }
+            catch(Exception e){
+                logger.error("Error during authentication", e);
+                return new ModelAndView("signin", "signInForm", form)
+                        .addObject("authError", "An error occurred during authentication");
+            }
     }
 
     @GetMapping("/signup")
@@ -101,7 +113,7 @@ public class UserController {
         }
         catch(RuntimeException e){
             // Redirects an attribute => error to display it => from sign up page to the signin page
-            redirectAttributes.addFlashAttribute("emailError","Username already exists");
+            redirectAttributes.addFlashAttribute("authError","Username already exists");
             return new ModelAndView( "redirect:/signin");
         }
     }

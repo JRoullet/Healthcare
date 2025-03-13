@@ -1,14 +1,22 @@
 package jroullet.mspatient.service;
 
 import jroullet.mspatient.model.Patient;
+import jroullet.mspatient.model.dto.PatientId;
 import jroullet.mspatient.repository.PatientRepository;
-import org.springframework.http.ResponseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Bean;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class PatientService {
 
     private final PatientRepository patientRepository;
+    private final static Logger logger = LoggerFactory.getLogger(PatientService.class.getName());
 
     public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
@@ -16,29 +24,61 @@ public class PatientService {
 
     public Patient createPatient(Patient patient) {
         patientRepository.save(patient);
+        logger.info("Patient Created");
         return patient;
     }
 
     public Boolean updatePatient(Patient updatedPatient) {
-        Patient patient = patientRepository.findByEmail(updatedPatient.getEmail());
-        if(patient.getFirstName().equals(updatedPatient.getFirstName()) && patient.getLastName().equals(updatedPatient.getLastName())) {
-            patient.setFirstName(patient.getFirstName());
-            patient.setLastName(patient.getLastName());
-            patient.setEmail(patient.getEmail());
-            patient.setGender(patient.getGender());
-            patient.setBirthday(patient.getBirthday());
-            patient.setAddress(patient.getAddress());
-            patient.setPhone(patient.getPhone());
-            patientRepository.save(patient);
-            return true;
+
+        // Patient object is not null
+        if(updatedPatient == null) {
+            throw new IllegalArgumentException("Patient cannot be null");
         }
-        return false;
+
+        // Patient Id is included
+        Long patientId = updatedPatient.getId();
+        if (patientId == null) {
+            throw new IllegalArgumentException("Patient ID cannot be null");
+        }
+
+        try{
+            Optional<Patient> existingPatientOpt = patientRepository.findById(updatedPatient.getId());
+            if(existingPatientOpt.isPresent()) {
+                Patient existingPatient = existingPatientOpt.get();
+                // Avoid code repetition and copy each property of updated patient to existing patient, except id (ignored)
+                BeanUtils.copyProperties(updatedPatient, existingPatient, "id");
+
+                patientRepository.save(existingPatient);
+                logger.info("Patient Updated");
+                return true;
+            }
+            return false;
+        }
+        catch (DataAccessException e) {
+                throw new RuntimeException("Error updating patient " + updatedPatient.getId() + " in database", e);
+            }
+        catch (IllegalArgumentException e){
+            throw new RuntimeException("Error copying patient properties " + updatedPatient.getId(), e);
+        }
+//          Map version
+//        try {
+//            return patientRepository.findById(patientId)
+//                    .map(existingPatient -> {
+//                        BeanUtils.copyProperties(updatedPatient, existingPatient, "id");
+//
+//                        patientRepository.save(existingPatient);
+//                        logger.info("Patient Updated: {}", patientId);
+//                        return true;
+//                    })
+//                    .orElse(false);
+//        } catch (DataAccessException e) {
+//            throw new RuntimeException("Error updating patient " + patientId + " in database", e);
+//        } catch (IllegalArgumentException e) {
+//            throw new RuntimeException("Error copying patient properties for patient " + patientId, e);
+
     }
 
-    public ResponseEntity<Patient> findPatientById(Long id) {
-        if (patientRepository.findById(id).isPresent()) {
-            return ResponseEntity.ok(patientRepository.findById(id).get());
-        }
-        return ResponseEntity.notFound().build();
+    public Optional<Patient> findPatientById(PatientId patientId) {
+        return patientRepository.findById(patientId.getId());
     }
 }

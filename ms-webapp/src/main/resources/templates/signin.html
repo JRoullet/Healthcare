@@ -16,21 +16,32 @@
           <div class="card-body p-5 text-center">
 
               <div class="logo-card">
-                  <img class="w-100 pb-3" th:src="@{/css/images/logo.png}" alt="Logo" />
+                  <img class="w-100 pb-3" th:src="@{/static/images/logo.png}" alt="Logo" />
               </div>
               <h2 class="card-title text-center mb-5 fw-bold fs-5">Sign in</h2>
-
+              <div th:if="${session.authError}" class="alert alert-danger" th:text="${session.authError}"></div>
             <!--            Redirection the error message "email already exists" since signup page (check UserController Redirect Attributes) -->
-            <div th:if="${emailError}" class="text-danger text-start" role="alert">
-              <p th:text="${emailError}"></p>
-            </div>
+<!--            <div th:if="${emailError}" class="text-danger text-start" role="alert">-->
+<!--              <p th:text="${emailError}"></p>-->
+<!--            </div>-->
+<!--            Authentication error message-->
 
-            <!--            Redirection the error message "authentication failed" -->
-            <div th:if="${param.authError}" class="text-danger text-start" role="alert">
-              <p> Invalid email or password</p>
-            </div>
+
+<!--            &lt;!&ndash;            Redirection the error message "authentication failed" &ndash;&gt;-->
+<!--            <div th:if="${param.authError}" class="text-danger text-start" role="alert">-->
+<!--              <p> Invalid email or password</p>-->
+<!--            </div>-->
 
             <form th:action="@{/authentication}" method="post" th:object="${signInForm}">
+              <div th:if="${authError}" class="alert alert-danger" th:text="${authError}"></div>
+
+              <div th:if="${#fields.hasErrors('username')}" class="alert alert-danger">
+                <span th:each="err : ${#fields.errors('username')}" th:text="${err}"></span>
+              </div>
+              <div th:if="${#fields.hasErrors('password')}" class="alert alert-danger">
+                <span th:each="err : ${#fields.errors('password')}" th:text="${err}"></span>
+              </div>
+
               <div data-mdb-input-init class="form-outline mb-4">
                 <input
                         type="text"
@@ -44,7 +55,6 @@
                 <div class="invalid-feedback text-start">
                   Please enter your username
                 </div>
-                <span th:errors="*{username}" th:if="${#fields.hasErrors('username')}" class="text-danger text-start"></span>
               </div>
 
 
@@ -59,7 +69,6 @@
               <div class="invalid-feedback text-start">
                 Please enter a password
               </div>
-              <span th:errors="*{password}" th:if="${#fields.hasErrors('password')}" class="text-danger text-end"></span>
 
 
 
