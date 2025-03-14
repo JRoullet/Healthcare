@@ -1,7 +1,10 @@
 package jroullet.mswebapp.security.config;
 
+import jroullet.mswebapp.service.AuthenticationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,6 +16,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SpringSecurityConfig {
+
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+
+    public SpringSecurityConfig(CustomAuthenticationFailureHandler customAuthenticationFailureHandler) {
+        this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -32,13 +41,12 @@ public class SpringSecurityConfig {
                 .formLogin((form) -> form
                         // customized login form
                         .loginPage("/signin")
-//                        .loginProcessingUrl("/authentication") // To go through your postmapping /authentication with spring security own means
-                        // username is default field and is changed here (=> checked field in the HTML form login page)
+                        .loginProcessingUrl("/authentication") // To go through your postmapping /authentication with spring security own means
                         .permitAll()
-                        // when successful, goes to "/" URL, => always
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/home", true) // when successful, goes to "/" URL, => always
+                        .failureHandler(customAuthenticationFailureHandler) // custom errors management
                         // Add an error code to the URL when login fails
-                        .failureUrl("/signin?authError=true")
+                        .failureUrl("/signin?authError=Invalid+email+or+password")
                 )
                 // logout access
                 .logout((logout) -> logout
@@ -49,16 +57,11 @@ public class SpringSecurityConfig {
         return http.build();
     }
 
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        return new AuthenticationService();
-//    }
-
-//    // SPRING SECURITY OWN MANAGEMENT
-//    @Bean
-//    AuthenticationManager authenticationManager(HttpSecurity http, AuthenticationService authenticationService) throws Exception {
-//        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-//        authenticationManagerBuilder.userDetailsService(authenticationService).passwordEncoder(passwordEncoder());
-//        return authenticationManagerBuilder.build();
-//    }
+    // SPRING SECURITY OWN MANAGEMENT
+    @Bean
+    AuthenticationManager authenticationManager(HttpSecurity http, AuthenticationService authenticationService) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(authenticationService).passwordEncoder(passwordEncoder());
+        return authenticationManagerBuilder.build();
+    }
 }

@@ -8,7 +8,7 @@
 </head>
 <body class = "signin-form" >
 
-<section class="vh-100" style="background-color: #508bfc;">
+<section class="vh-100" style="background-color: #B8E0F7;">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -16,9 +16,9 @@
           <div class="card-body p-5 text-center">
 
               <div class="logo-card">
-                  <img class="w-100 pb-3" th:src="@{/static/images/healthcare_logo.png}" alt="HealthCare Logo" />
+                  <img class="w-100 pb-3" th:src="@{/images/healthcarelogo.png}" alt="HealthCare Logo" />
               </div>
-              <h2 class="card-title text-center mb-5 fw-bold fs-5">Sign in</h2>
+              <h2 class="card-title h4 mb-5 fw-bold">Sign in</h2>
               <div th:if="${session.authError}" class="alert alert-danger" th:text="${session.authError}"></div>
             <!--            Redirection the error message "email already exists" since signup page (check UserController Redirect Attributes) -->
 <!--            <div th:if="${emailError}" class="text-danger text-start" role="alert">-->
@@ -33,14 +33,18 @@
 <!--            </div>-->
 
             <form th:action="@{/authentication}" method="post" th:object="${signInForm}">
-              <div th:if="${authError}" class="alert alert-danger" th:text="${authError}"></div>
 
-              <div th:if="${#fields.hasErrors('username')}" class="alert alert-danger">
-                <span th:each="err : ${#fields.errors('username')}" th:text="${err}"></span>
+              <div th:if="${authError}" class="alert alert-danger">
+                <span th:text="${authError}"></span>
               </div>
-              <div th:if="${#fields.hasErrors('password')}" class="alert alert-danger">
-                <span th:each="err : ${#fields.errors('password')}" th:text="${err}"></span>
-              </div>
+
+
+<!--              <div th:if="${#fields.hasErrors('username')}" class="alert alert-danger">-->
+<!--                <span th:each="err : ${#fields.errors('username')}" th:text="${err}"></span>-->
+<!--              </div>-->
+<!--              <div th:if="${#fields.hasErrors('password')}" class="alert alert-danger">-->
+<!--                <span th:each="err : ${#fields.errors('password')}" th:text="${err}"></span>-->
+<!--              </div>-->
 
               <div data-mdb-input-init class="form-outline mb-4">
                 <input
@@ -49,6 +53,7 @@
                         th:field="*{username}"
                         class="form-outline form-control-color"
                         placeholder="Username"
+                        required
                 >
 <!--                required-->
 
@@ -64,7 +69,10 @@
                        th:field="*{password}"
                        name="password"
                        class="form-outline form-control-color"
-                       placeholder="Password"/>
+                       placeholder="Password"
+                       required
+                />
+
               </div>
               <div class="invalid-feedback text-start">
                 Please enter a password
@@ -73,11 +81,11 @@
 
 
 
-              <div class="form-check d-flex justify-content-start mb-4">
-                <input class="form-check-input" type="checkbox" value="" id="form1Example3" />
-                <label class="form-check-label" for="form1Example3"> Remember password </label>
-              </div>
-              <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+<!--              <div class="form-check d-flex justify-content-start mb-4">-->
+<!--                <input class="form-check-input" type="checkbox" value="" id="form1Example3" />-->
+<!--                <label class="form-check-label" for="form1Example3"> Remember password </label>-->
+<!--              </div>-->
+              <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg btn-block " type="submit">Login</button>
                 <a class="d-block text-center mt-2 small" href="/signup">New to flash cash? Sign up</a>
 
             </form>

@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -80,5 +81,9 @@ public class PatientService {
 
     public Optional<Patient> findPatientById(PatientId patientId) {
         return patientRepository.findById(patientId.getId());
+    }
+
+    public List<Patient> findAll() {
+        return patientRepository.findAll();
     }
 }

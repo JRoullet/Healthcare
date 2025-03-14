@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -32,7 +33,7 @@ public class PatientController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient with id " + patientId.getId() + " not found");
     }
 
-    @PostMapping("/create")
+    @PostMapping("/new")
     public ResponseEntity<Patient> createPatient(@RequestBody Patient patient) {
         Patient createdPatient = patientService.createPatient(patient);
         logger.info("created patient");
@@ -48,5 +49,14 @@ public class PatientController {
         }
         logger.info("patient could not be updated");
         return new ResponseEntity<>(updatedPatient, HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Patient>> getAllPatients() {
+        List<Patient> patients = patientService.findAll();
+        if (patients.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(patients, HttpStatus.OK);
     }
 }

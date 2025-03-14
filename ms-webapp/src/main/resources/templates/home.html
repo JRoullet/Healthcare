@@ -11,9 +11,9 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container">
         <div class="logo me-3">
-            <img th:src="@{/static/images/healthcare_logo.png}" alt="HealthCare Logo" />
+            <img th:src="@{/images/healthcarelogo.png}" alt="HealthCare Logo" />
         </div>
-        <a class="navbar-brand" href="/home-hc">HealthCare</a>
+        <a class="navbar-brand" href="/home">HealthCare</a>
         <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarMain">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -23,7 +23,7 @@
                     <a class="nav-link active" href="/home">Patients</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/add-patient">Ajouter un patient</a>
+                    <a class="nav-link" href="/patient/new">Ajouter un patient</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/patient-notes">Notes</a>
@@ -45,7 +45,7 @@
                 <p class="mb-0">Gérez vos patients et leurs informations médicales</p>
             </div>
             <div class="col-md-4 text-end">
-                <button class="btn btn-primary" onclick="window.location.href='/add-patient'">
+                <button class="btn btn-primary" onclick="window.location.href='/patient/new'">
                     Ajouter un patient
                 </button>
             </div>
@@ -93,8 +93,8 @@
                             <!-- Message si pas de patients -->
                             <tr th:if="${patients == null || patients.isEmpty()}">
                                 <td colspan="6" class="text-center py-4">
-                                    Aucun patient enregistré.
-                                    <a href="/add-patient" class="btn btn-sm btn-primary ms-2">Ajouter un patient</a>
+                                    Aucun patient enregistré
+<!--                                    <a href="/update-patient" class="btn btn-sm btn-primary ms-2">Ajouter un patient</a>-->
                                 </td>
                             </tr>
                             </tbody>

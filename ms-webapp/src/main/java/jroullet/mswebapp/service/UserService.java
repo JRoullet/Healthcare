@@ -53,6 +53,7 @@ public class UserService {
             User newUser = new User();
             newUser.setUsername(form.getUsername());
             newUser.setPassword(passwordEncoder.encode(form.getPassword()));
+            newUser.setRole("USER");
 
 
             return patientFeignClient.createUser(newUser);
@@ -62,29 +63,26 @@ public class UserService {
                 throw e;
 
         }
-
-
-
     }
 
 
 
 
-    @Transactional
-    public boolean isAuthenticated(@NotBlank(message = "Email needed") @Email(message = "Invalid email") String email, @NotBlank(message = "Password needed") String password) {
-        Optional<User> userOptional = Optional.ofNullable(patientFeignClient.findUserByUsername(email));
-
-        if(userOptional.isEmpty()){
-            return false;
-        }
-        User user = userOptional.get();
-        String storedPassword = user.getPassword();
-
-        if(storedPassword!= null && passwordEncoder.matches(password, storedPassword)){
-            return true;
-        }
-        return false;
-    }
+//    @Transactional
+//    public boolean isAuthenticated(@NotBlank(message = "Email needed") @Email(message = "Invalid email") String email, @NotBlank(message = "Password needed") String password) {
+//        Optional<User> userOptional = Optional.ofNullable(patientFeignClient.findUserByUsername(email));
+//
+//        if(userOptional.isEmpty()){
+//            return false;
+//        }
+//        User user = userOptional.get();
+//        String storedPassword = user.getPassword();
+//
+//        if(storedPassword!= null && passwordEncoder.matches(password, storedPassword)){
+//            return true;
+//        }
+//        return false;
+//    }
 //
 //    public Optional<User> getUserByEmail(@NotBlank(message = "Email needed") @Email(message = "Invalid email") String email) {
 //         return Optional.ofNullable(userRepository.findUserByEmail(email))
