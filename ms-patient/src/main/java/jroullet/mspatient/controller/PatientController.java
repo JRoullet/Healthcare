@@ -1,11 +1,13 @@
 package jroullet.mspatient.controller;
 
 import jroullet.mspatient.model.Patient;
+import jroullet.mspatient.model.dto.NoteDto;
 import jroullet.mspatient.model.dto.PatientId;
 import jroullet.mspatient.service.PatientService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,8 @@ import java.util.Optional;
 @RequestMapping("/patient")
 public class PatientController {
 
-    private final PatientService patientService;
+    @Autowired
+    private PatientService patientService;
     private final Logger logger = LoggerFactory.getLogger(PatientController.class);
 
 
@@ -59,6 +62,20 @@ public class PatientController {
         }
         return new ResponseEntity<>(patients, HttpStatus.OK);
     }
+
+    @GetMapping("/{id}/notes")
+    public ResponseEntity<List<NoteDto>> getNotesByPatientId(@PathVariable Long patientId){
+        List<NoteDto> notes = patientService.getNotesByPatientId(patientId);
+        return new ResponseEntity<>(notes, HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/notes")
+    public ResponseEntity<NoteDto> addNoteToPatient(@PathVariable Long id, @RequestBody NoteDto noteDto){
+        NoteDto createdNote = patientService.addNoteToPatient(id, noteDto);
+        return new ResponseEntity.status(HttpStatus.CREATED).body(createdNote);
+    }
+
+
 
 
 }

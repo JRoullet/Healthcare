@@ -53,4 +53,16 @@ public class NoteController {
         noteService.deleteNoteById(noteId);
         return new ResponseEntity<>("Note deleted", HttpStatus.OK);
     }
+
+    @GetMapping("/notes/patient/{patientId}")
+    public List<NoteDto> getNotesByPatientId(@PathVariable Long patientId) {
+         List<NoteDto> NoteDtos;
+         noteService.findNotesByPatientId(patientId);
+         return NoteDtos;
+    }
+
+
+
+
+
 }
