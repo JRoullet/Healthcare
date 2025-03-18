@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil | HealthCare</title>
+    <link th:href="@{css/mdb.min.css}" rel="stylesheet"/>
+    <link th:href="@{css/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <div class="logo me-3">
+            <img th:src="@{/images/healthcarelogo.png}" alt="HealthCare Logo" />
+        </div>
+        <a class="navbar-brand" href="/home">HealthCare</a>
+        <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/home">Patients</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/patient/new">Ajouter un patient</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/patient-notes">Notes</a>
+                </li>
+            </ul>
+            <div class="d-flex align-items-center">
+                <span class="me-3" th:if="${user != null}" th:text="${user.getUsername()}"></span>
+                <button type="button" class="btn btn-outline-primary" onclick="window.location.href='/logout'">Déconnexion</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <div class="welcome-banner">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="h4 mb-0">Bienvenue sur votre espace HealthCare</h1>
+                <p class="mb-0">Gérez vos patients et leurs informations médicales</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <button class="btn btn-primary" onclick="window.location.href='/patient/new'">
+                    Ajouter un patient
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-body p-0">
+                    <h5 class="card-title p-3 mb-0 border-bottom">Liste de notes</h5>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                            <tr>
+                                <th>Date de création</th>
+                                <th>Note</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Itération sur la liste des notes -->
+                            <tr th:each="note : ${notes}" th:if="${notes != null}">
+                                <td th:text="${note.creationDate}">Date de création</td>
+                                <td th:text="${note.content}">Note</td>
+
+                                <td class="action-buttons">
+                                    <a th:href="@{/patient/update/{id} (id=${patient.id})}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-edit"></i> Modifier
+                                    </a>
+                                    <a th:href="@{/patient/{id}/notes(id=${patient.id})}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-clipboard"></i> Notes
+                                    </a>
+                                </td>
+                            </tr>
+                            <!-- Message si pas de patients -->
+                            <tr th:if="${patients == null || patients.isEmpty()}">
+                                <td colspan="6" class="text-center py-4">
+                                    Aucun patient enregistré
+<!--                                    <a href="/update-patient" class="btn btn-sm btn-primary ms-2">Ajouter un patient</a>-->
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="py-3 mt-5 bg-white border-top">
+    <div class="container">
+        <p class="text-center text-muted mb-0">© 2025 HealthCare. Tous droits réservés.</p>
+    </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
