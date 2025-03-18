@@ -72,7 +72,7 @@ public class PatientController {
     @PostMapping("/{id}/notes")
     public ResponseEntity<NoteDto> addNoteToPatient(@PathVariable Long id, @RequestBody NoteDto noteDto){
         NoteDto createdNote = patientService.addNoteToPatient(id, noteDto);
-        return new ResponseEntity.status(HttpStatus.CREATED).body(createdNote);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdNote);
     }
 
 
