@@ -28,7 +28,7 @@ public class PatientController {
         Optional<Patient> patient = patientService.findPatientById(patientId);
         if(patient.isPresent()) {
             logger.info("Patient {} found", patientId.getId());
-            return new ResponseEntity<>(patient.get(), HttpStatus.FOUND);
+            return new ResponseEntity<>(patient.get(), HttpStatus.OK);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient with id " + patientId.getId() + " not found");
     }
@@ -41,7 +41,7 @@ public class PatientController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Patient> updatePatient(@RequestBody Patient updatedPatient) {
+    public ResponseEntity<Patient> updatePatientById(@RequestBody Patient updatedPatient) {
         patientService.updatePatient(updatedPatient);
         if (patientService.updatePatient(updatedPatient)) {
             logger.info("updated patient");

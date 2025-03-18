@@ -29,7 +29,7 @@ public interface PatientFeignClient {
 
     //Update
     @PutMapping(value = "/patient/update", consumes = "application/json")
-    Patient updatePatient(@RequestBody Patient updatedPatient);
+    Patient updatePatientById(@RequestBody Patient updatedPatient);
 
 //    USER PART
     @PostMapping(value= "/user/get", consumes = "application/json")
