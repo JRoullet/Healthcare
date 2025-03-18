@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8090
 spring:
   application:
     name: "ms-webapp"
@@ -14,12 +14,9 @@ spring:
       mode: always
 
   #------ Imported config must be quite empty to avoid loosing time from a/r -----#
+#  IDE CONFIGURATION
   config:
-    import:
-# Dans docker
-#      configserver:http://msconfigserver:8888/
-# Dans l'IDE
-      configserver:http://localhost:8888/
+    import: configserver:http://localhost:8888/
 
 #-----------EUREKA----------------
 #--------------Eureka Server----------------
@@ -29,7 +26,6 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka/
-#      defaultZone: http://msdiscovery:8761/eureka/
 
 #-----------Actuator----------------
 #Will be used into docker-compose to pass the healthcheck step, service can now be pinged
@@ -38,5 +34,3 @@ management:
     web:
       exposure:
         include: "*"
-
-

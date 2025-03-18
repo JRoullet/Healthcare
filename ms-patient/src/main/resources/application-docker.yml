@@ -4,9 +4,9 @@ spring:
   application:
     name: "ms-patient"
   profiles:
-    active: "prod"
+    active: "docker"
   datasource:
-    url: jdbc:mysql://localhost:3308/patientdb
+    url: jdbc:mysql://mspatientdb:3306/patientdb
     username: "root"
     password: "root"
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -18,8 +18,11 @@ spring:
   sql:
     init:
       mode: always
+
+#------ Imported config must be quite empty to avoid loosing time from a/r -----#
+#  Docker Configuration
   config:
-    import: configserver:http://localhost:8888/
+    import: configserver:http://msconfigserver:8888/
 
 #-----------EUREKA----------------
 #--------------Eureka Server----------------
@@ -28,7 +31,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://msdiscovery:8761/eureka/
 
 #-----------Actuator----------------
 #Will be used into docker-compose to pass the healthcheck step, service can now be pinged

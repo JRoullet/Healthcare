@@ -36,34 +36,23 @@ services:
     extends:
       file: common-config.yml
       service: microservice-configserver-config
-#    environment:
-#      SPRING_APPLICATION_NAME: msdiscovery
-#      SERVER_PORT: 8761
 
   mswebapp:
     image: jroullet/healthcare-ms-webapp:latest
     container_name: webapp-ms
     ports:
       - "8090:8090"
-    networks:
-      - healthcare
     depends_on:
-      - msconfigserver
-      - msdiscovery
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 30s
-        max_attempts: 3
-        window: 120s
+      mspatientdb:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-discovery-config
     environment:
-      SPRING_PROFILES_ACTIVE: default
-      SPRING_CONFIG_IMPORT: configserver:http://msconfigserver:8888/
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://msdiscovery:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mspatientdb:3306/patientdb
 
   mspatientdb:
     container_name: patientdb
-
     ports:
       - "3308:3306"
     environment:
@@ -74,23 +63,18 @@ services:
 
 
   mspatient:
-    image: jroullet/patient:latest
+    image: jroullet/healthcare-ms-patient:latest
     container_name: patient-ms
     ports:
-      - "8080:8080"
-    environment:
-      SPRING_APPLICATION_NAME: "mspatient"
-      SPRING_DATASOURCE_URL: "jdbc:mysql://mspatientdb:3306/patientdb"
+      - "8070:8070"
     depends_on:
-      msconfigserver:
-        condition: service_healthy
-      msdiscovery:
-        condition: service_healthy
       mspatientdb:
         condition: service_healthy
     extends:
       file: common-config.yml
       service: microservice-discovery-config
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mspatientdb:3306/patientdb
 
   msmongodb:
     image: mongo:latest

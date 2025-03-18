@@ -2,8 +2,4 @@ spring:
   application:
     name: ms-discovery
   config:
-    import:
-# Dans docker
-#      configserver:http://msconfigserver:8888/
-# Dans l'IDE
-      configserver:http://localhost:8888/
+    import: configserver:http://localhost:8888/

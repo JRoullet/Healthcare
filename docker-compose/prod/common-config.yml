@@ -15,7 +15,7 @@ services:
     extends:
       service: microservice-base-config
     environment:
-      SPRING_PROFILES_ACTIVE: prod
+      SPRING_PROFILES_ACTIVE: docker
       SPRING_CONFIG_IMPORT: configserver:http://msconfigserver:8888/
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
@@ -24,7 +24,11 @@ services:
     extends:
       service:
         microservice-configserver-config
-
+    depends_on:
+      msconfigserver:
+        condition: service_healthy
+      msdiscovery:
+        condition: service_healthy
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://msdiscovery:8761/eureka/
 

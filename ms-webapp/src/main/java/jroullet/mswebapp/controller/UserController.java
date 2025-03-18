@@ -1,19 +1,13 @@
 package jroullet.mswebapp.controller;
 
 import jakarta.validation.Valid;
-import jroullet.mswebapp.clients.PatientFeignClient;
-import jroullet.mswebapp.dto.PatientId;
 import jroullet.mswebapp.dto.SignInForm;
 import jroullet.mswebapp.dto.SignUpForm;
-import jroullet.mswebapp.model.Patient;
-import jroullet.mswebapp.model.User;
-import jroullet.mswebapp.service.SessionService;
 import jroullet.mswebapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,8 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 
 @Controller
@@ -34,6 +26,7 @@ public class UserController {
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     // SPRING SECURITY OWN MANAGEMENT
+
     @GetMapping("/signin")
     public ModelAndView showSignInView(@RequestParam(value = "authError", required = false) String authError) {
         ModelAndView modelAndView = new ModelAndView("signin", "signInForm", new SignInForm());
