@@ -1,8 +1,10 @@
 package jroullet.mswebapp.controller;
 
+import jroullet.mswebapp.clients.NotesFeignClient;
 import jroullet.mswebapp.clients.PatientFeignClient;
 import jroullet.mswebapp.dto.PatientId;
 import jroullet.mswebapp.model.Patient;
+import jroullet.mswebapp.service.SessionService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,18 +14,21 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/patient")
 public class PatientController {
 
     private final PatientFeignClient patientFeignClient;
+    private final SessionService sessionService;
     private final static Logger logger = LoggerFactory.getLogger(PatientController.class);
+    private final NotesFeignClient notesFeignClient;
 
-    @GetMapping("/patient/new")
+    @GetMapping("/new")
     public String showAddPatientForm(Model model) {
         model.addAttribute("patient", new Patient());
         return "add-patient";
     }
 
-    @PostMapping("/patient/new")
+    @PostMapping("/new")
     public String addPatient(@ModelAttribute Patient patient, Model model){
         Patient createdPatient = patientFeignClient.createPatient(patient);
         if(createdPatient != null){
@@ -33,7 +38,7 @@ public class PatientController {
         return "add-patient";
     }
 
-    @GetMapping("/patient/update/{id}")
+    @GetMapping("/update/{id}")
     public String showUpdatePatientForm(@PathVariable("id") Long id, Model model) {
         PatientId patientId = new PatientId();
         patientId.setId(id);
@@ -45,7 +50,7 @@ public class PatientController {
         return "update-patient";
     }
 
-    @PostMapping("/patient/update/{id}")
+    @PostMapping("/update/{id}")
     public String updatePatient(@PathVariable("id") Long id, @ModelAttribute Patient patient, Model model) {
         patient.setId(id);
         Patient updatedPatient = patientFeignClient.updatePatientById(patient);
@@ -55,4 +60,19 @@ public class PatientController {
         model.addAttribute("error", "Error updating patient");
         return "update-patient";
     }
+
+
+
+
+//    @PostMapping("/update/{id}")
+//    public String updatePatient(@PathVariable("id") Long id, @ModelAttribute Patient patient, Model model) {
+//        patient.setId(id);
+//        Patient updatedPatient = patientFeignClient.updatePatientById(patient);
+//        if (updatedPatient != null) {
+//            return "redirect:/home";
+//        }
+//        model.addAttribute("error", "Error updating patient");
+//        return "update-patient";
+//    }
+
 }

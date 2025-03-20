@@ -47,7 +47,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body p-4">
-                    <form th:action="@{/patient/{id}/notes(id=${patient.id})}" method="post" th:object="${noteDto}" class="needs-validation" novalidate>
+                    <form th:action="@{/patient/{id}/notes/add (id=${patientId})}" method="post" th:object="${noteDto}" class="needs-validation" novalidate>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="content" class="form-label">Contenu de la note</label>

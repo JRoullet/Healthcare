@@ -1,13 +1,14 @@
-package jroullet.msnotes.model;
+package jroullet.mswebapp.model;
 
 import jakarta.persistence.Id;
-import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Data
-@Document(collection = "notes")
+@Getter
+@Setter
+
 public class Note {
     @Id
     private String id;

@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil | HealthCare</title>
-    <link th:href="@{css/mdb.min.css}" rel="stylesheet"/>
-    <link th:href="@{css/styles.css}" rel="stylesheet"/>
+    <title>Notes du patient | HealthCare</title>
+    <link th:href="@{/css/mdb.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/styles.css}" rel="stylesheet"/>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg">
@@ -30,7 +30,6 @@
                 </li>
             </ul>
             <div class="d-flex align-items-center">
-                <span class="me-3" th:if="${user != null}" th:text="${user.getUsername()}"></span>
                 <button type="button" class="btn btn-outline-primary" onclick="window.location.href='/logout'">Déconnexion</button>
             </div>
         </div>
@@ -41,13 +40,13 @@
     <div class="welcome-banner">
         <div class="row align-items-center">
             <div class="col-md-8">
-                <h1 class="h4 mb-0">Bienvenue sur votre espace HealthCare</h1>
-                <p class="mb-0">Gérez vos patients et leurs informations médicales</p>
+                <h1 class="h4 mb-0">Notes du patient</h1>
+                <p class="mb-0">Gérez les notes médicales du patient</p>
             </div>
             <div class="col-md-4 text-end">
-                <button class="btn btn-primary" onclick="window.location.href='/patient/new'">
-                    Ajouter un patient
-                </button>
+                <a th:href="@{/patient/{id}/notes/add(id=${patientId})}" class="btn btn-primary">
+                    Ajouter une note
+                </a>
             </div>
         </div>
     </div>
@@ -56,14 +55,14 @@
         <div class="col">
             <div class="card">
                 <div class="card-body p-0">
-                    <h5 class="card-title p-3 mb-0 border-bottom">Liste de notes</h5>
+                    <h5 class="card-title p-3 mb-0 border-bottom">Liste des notes</h5>
 
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
                             <thead>
                             <tr>
                                 <th>Date de création</th>
-                                <th>Note</th>
+                                <th>Contenu de la note</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
@@ -71,22 +70,20 @@
                             <!-- Itération sur la liste des notes -->
                             <tr th:each="note : ${notes}" th:if="${notes != null}">
                                 <td th:text="${note.creationDate}">Date de création</td>
-                                <td th:text="${note.content}">Note</td>
-
+                                <td th:text="${note.content}">Contenu de la note</td>
                                 <td class="action-buttons">
-                                    <a th:href="@{/patient/update/{id} (id=${patient.id})}" class="btn btn-sm btn-outline-primary">
+                                    <a th:href="@{/patient/{patientId}/notes/update/{noteId}(patientId=${patientId}, noteId=${note.id})}" class="btn btn-sm btn-outline-primary">
                                         <i class="fas fa-edit"></i> Modifier
                                     </a>
-                                    <a th:href="@{/patient/{id}/notes(id=${patient.id})}" class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-clipboard"></i> Notes
+                                    <a th:href="@{/patient/{patientId}/notes/delete/{noteId}(patientId=${patientId}, noteId=${note.id})}" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i> Supprimer
                                     </a>
                                 </td>
                             </tr>
-                            <!-- Message si pas de patients -->
-                            <tr th:if="${patients == null || patients.isEmpty()}">
-                                <td colspan="6" class="text-center py-4">
-                                    Aucun patient enregistré
-<!--                                    <a href="/update-patient" class="btn btn-sm btn-primary ms-2">Ajouter un patient</a>-->
+                            <!-- Message si pas de notes -->
+                            <tr th:if="${notes == null || notes.isEmpty()}">
+                                <td colspan="3" class="text-center py-4">
+                                    Aucune note enregistrée pour ce patient
                                 </td>
                             </tr>
                             </tbody>
@@ -107,15 +104,3 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-

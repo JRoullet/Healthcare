@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,16 +24,17 @@ public class NoteService {
     private static final Logger logger = LoggerFactory.getLogger(NoteService.class);
 
     public Note createNote(Note note) {
+        note.setCreationDate(LocalDate.now());
         return noteRepository.save(note);
     }
 
-    public List<Note> findNotesByPatientId(PatientId patientId) {
-        return noteRepository.findNotesByPatientId(patientId.getPatientId());
+    public List<Note> findNotesByPatientId(Long patientId) {
+        return noteRepository.findNotesByPatientId(patientId);
     }
 
-    public Note findNoteById(NoteId noteId) {
-        Optional<Note> note = noteRepository.findNoteById(noteId.getId());
-        return note.orElseThrow(() -> new RuntimeException("Note not found"));
+    public Note findNoteById(String id) {
+        Optional<Note> note = noteRepository.findNoteById(id);
+        return note.orElseThrow(() -> new IllegalArgumentException("Note not found"));
     }
 
 
@@ -40,8 +42,7 @@ public class NoteService {
         if(updatedNote == null) {
             throw new IllegalArgumentException("Note cannot be null");
         }
-        ObjectId noteId = updatedNote.getId();
-        if(noteId == null) {
+        if(updatedNote.getId() == null) {
             throw new IllegalArgumentException("Note id cannot be null");
         }
         try{
@@ -65,10 +66,12 @@ public class NoteService {
         }
     }
 
-    public void deleteNoteById(NoteId noteId) {
-        Note note = noteRepository.findNoteById(noteId.getId())
+    public void deleteNoteById(String id) {
+        Note note = noteRepository.findNoteById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Note not found"));
         noteRepository.delete(note);
         logger.info("Note Deleted");
     }
+
+
 }

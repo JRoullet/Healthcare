@@ -1,0 +1,78 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Add Patient | HealthCare</title>-->
+<!--    <link th:href="@{/css/mdb.min.css}" rel="stylesheet"/>-->
+<!--    <link th:href="@{/css/styles.css}" rel="stylesheet"/>-->
+<!--</head>-->
+<!--<body>-->
+<!--<nav class="navbar navbar-expand-lg">-->
+<!--    <div class="container">-->
+<!--        <div class="logo me-3">-->
+<!--            <img th:src="@{/images/healthcarelogo.png}" alt="Logo HealthCare" />-->
+<!--        </div>-->
+<!--        <a class="navbar-brand" href="/home">HealthCare</a>-->
+<!--        <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarMain">-->
+<!--            <span class="navbar-toggler-icon"></span>-->
+<!--        </button>-->
+<!--        <div class="collapse navbar-collapse" id="navbarMain">-->
+<!--            <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link active" href="/home">Patients</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="/patient/new">Ajouter un patient</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="/patient-notes">Notes</a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--            <div class="d-flex align-items-center">-->
+<!--                <span class="me-3" th:if="${user != null}" th:text="${user.getUsername()}"></span>-->
+<!--                <button type="button" class="btn btn-outline-primary" onclick="window.location.href='/logout'">Déconnexion</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</nav>-->
+
+<!--<div class="container py-4">-->
+<!--    <div class="page-header">-->
+<!--        <h1 class="h4 mb-0">Add patient</h1>-->
+<!--        <p class="mb-0">Remplissez le formulaire ci-dessous pour ajouter un nouveau patient</p>-->
+<!--    </div>-->
+
+<!--    <div class="row">-->
+<!--        <div class="col-md-12">-->
+<!--            <div class="card">-->
+<!--                <div class="card-body p-4">-->
+<!--                    <form th:action="@{/patient/{id}/notes/add (id=${patientId})}" method="post" th:object="${noteDto}" class="needs-validation" novalidate>-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-md-6 mb-3">-->
+<!--                                <label for="content" class="form-label">Contenu de la note</label>-->
+<!--                                <textarea type="text" class="form-control" id="content" th:field="*{content}" rows="3" required></textarea>-->
+<!--                                <div class="invalid-feedback">-->
+<!--                                    Veuillez entrer le contenu de la note.-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        <div class="d-flex justify-content-end mt-4">-->
+<!--                            <a href="/home" class="btn btn-outline-secondary me-2">Annuler</a>-->
+<!--                            <button type="submit" class="btn btn-primary">Ajouter la note</button>-->
+<!--                        </div>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<footer class="py-3 mt-5 bg-white border-top">-->
+<!--    <div class="container">-->
+<!--        <p class="text-center text-muted mb-0">© 2025 HealthCare. Tous droits réservés.</p>-->
+<!--    </div>-->
+<!--</footer>-->
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>-->
+<!--</body>-->
+<!--</html>-->

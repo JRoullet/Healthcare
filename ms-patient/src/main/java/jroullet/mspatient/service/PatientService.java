@@ -86,9 +86,13 @@ public class PatientService {
 //            throw new RuntimeException("Error copying patient properties for patient " + patientId, e);
 
     }
-
+    //PostMapping (PatientId)
     public Optional<Patient> findPatientById(PatientId patientId) {
         return patientRepository.findById(patientId.getId());
+    }
+    // GetMapping (Long id)
+    public Optional<Patient> getPatientById(Long id) {
+        return patientRepository.findById(id);
     }
 
     public List<Patient> findAll() {
@@ -105,4 +109,10 @@ public class PatientService {
     }
 
 
+
+//    public NoteDto updateNoteToPatient(@PathVariable Long id, @PathVariable String noteId, @RequestBody NoteDto noteDto) {
+//        noteDto.setPatientId(id);
+//        noteDto.setId(noteId);
+//        return notesFeignClient.updateNote(noteDto);
+//    }
 }

@@ -23,9 +23,18 @@ public class PatientController {
 
     @Autowired
     private PatientService patientService;
+
     private final Logger logger = LoggerFactory.getLogger(PatientController.class);
 
+    // Create Patient
+    @PostMapping("/new")
+    public ResponseEntity<Patient> createPatient(@RequestBody Patient patient) {
+        Patient createdPatient = patientService.createPatient(patient);
+        logger.info("created patient");
+        return new ResponseEntity<>(createdPatient, HttpStatus.CREATED);
+    }
 
+    // Read Patient (PostMapping PatientId DTO)
     @PostMapping("/get")
     public ResponseEntity<?> getPatientById(@RequestBody PatientId patientId) {
         Optional<Patient> patient = patientService.findPatientById(patientId);
@@ -36,13 +45,7 @@ public class PatientController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient with id " + patientId.getId() + " not found");
     }
 
-    @PostMapping("/new")
-    public ResponseEntity<Patient> createPatient(@RequestBody Patient patient) {
-        Patient createdPatient = patientService.createPatient(patient);
-        logger.info("created patient");
-        return new ResponseEntity<>(createdPatient, HttpStatus.CREATED);
-    }
-
+    // Update Patient
     @PutMapping("/update")
     public ResponseEntity<Patient> updatePatientById(@RequestBody Patient updatedPatient) {
         patientService.updatePatient(updatedPatient);
@@ -54,6 +57,7 @@ public class PatientController {
         return new ResponseEntity<>(updatedPatient, HttpStatus.NOT_FOUND);
     }
 
+    // Read List of Patients
     @GetMapping("/all")
     public ResponseEntity<List<Patient>> getAllPatients() {
         List<Patient> patients = patientService.findAll();
@@ -63,18 +67,30 @@ public class PatientController {
         return new ResponseEntity<>(patients, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/notes")
-    public ResponseEntity<List<NoteDto>> getNotesByPatientId(@PathVariable Long patientId){
-        List<NoteDto> notes = patientService.getNotesByPatientId(patientId);
-        return new ResponseEntity<>(notes, HttpStatus.OK);
-    }
-
-    @PostMapping("/{id}/notes")
-    public ResponseEntity<NoteDto> addNoteToPatient(@PathVariable Long id, @RequestBody NoteDto noteDto){
-        NoteDto createdNote = patientService.addNoteToPatient(id, noteDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdNote);
-    }
-
+//    // Create Note
+//    @PostMapping("/{id}/notes")
+//    public ResponseEntity<NoteDto> addNoteToPatient(@PathVariable Long id, @RequestBody NoteDto noteDto){
+//        NoteDto createdNote = patientService.addNoteToPatient(id, noteDto);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(createdNote);
+//    }
+//
+//    // Read List of Notes by patient
+//    @GetMapping("/{id}/notes")
+//    public ResponseEntity<List<NoteDto>> getNotesByPatientId(@PathVariable Long id){
+//        List<NoteDto> notes = patientService.getNotesByPatientId(id);
+//        return new ResponseEntity<>(notes, HttpStatus.OK);
+//    }
+//
+//    // Read Patient (GetMapping, Long id from Patient)
+//    @GetMapping("/{id}")
+//    public ResponseEntity<?> getPatientById(@PathVariable Long id) {
+//        Optional<Patient> patient = patientService.getPatientById(id);
+//        if(patient.isPresent()) {
+//            logger.info("Patient {} found", id);
+//            return new ResponseEntity<>(patient.get(), HttpStatus.OK);
+//        }
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient with id " + id + " not found");
+//    }
 
 
 

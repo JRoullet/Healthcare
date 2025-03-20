@@ -14,5 +14,7 @@ public interface NoteRepository extends MongoRepository<Note, String> {
     
     List<Note> findNotesByPatientId(Long patientId);
 
-    Optional<Note> findNoteById(ObjectId id);
+    Optional<Note> findNoteById(String id);
+
+    String id(String id);
 }
