@@ -80,9 +80,9 @@
                                 <td th:text="${note.content}">Contenu de la note</td>
                                 <td class="action-buttons col-md-2 text-end">
                                     <div class="d-flex justify-content-end">
-                                        <a th:href="@{/patient/{id}/notes/update/{noteId}(id=${patientId}, noteId=${note.id})}" class="btn btn-sm btn-outline-primary edit-note-btn"
-                                           th:data-note-id="${note.id}"
-                                           th:data-patient-id="${patientId}">
+<!--                                        Note th:href, to our postmapping URL , pass arguments id for {id}, patientId is the model attribute in the controller -->
+                                        <a th:href="@{/patient/{id}/notes/update/{noteId}(id=${patientId}, noteId=${note.id})}"
+                                           class="btn btn-sm btn-outline-primary edit-note-btn">
                                             <i class="fas fa-edit"></i> Modifier
                                         </a>
                                         <a th:href="@{/patient/{id}/notes/delete/{noteId}(id=${patientId}, noteId=${note.id})}"
@@ -106,6 +106,7 @@
         </div>
     </div>
 </div>
+<!--MODAL PART - POP UP-->
 <div class="modal fade" id="editNoteModal" tabindex="-1" aria-labelledby="editNoteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -113,13 +114,18 @@
                 <h5 class="modal-title" id="editNoteModalLabel">Modifier la note</h5>
                 <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
             </div>
+<!--             Has to be on method= POST
+                    + th:object (@ModelAttribute noteToUpdate, instead of @RequestBody)
+                    + th:action (Post Mapping URL)-->
             <div class="modal-body">
+<!--                Model attribute is noteToUpdate of type Note, field "content" for th:field has to be in Note type object-->
                 <form id="updateNoteForm"
                       method="post"
                       class="needs-validation"
                       th:object="${noteToUpdate}"
                       th:action="@{'/patient/' + ${patientId} + '/notes/update/' + ${noteToUpdate.id}}"
                       novalidate>
+<!--                    CSRF has to be disabled between microservices (where authentication is already verified)-->
                     <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <div class="row">
                         <div class="col-md-12 mb-3">

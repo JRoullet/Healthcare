@@ -24,8 +24,6 @@ public class PatientNoteController {
     NotesFeignClient notesFeignClient;
     @Autowired
     private PatientFeignClient patientFeignClient;
-//    @Autowired
-//    private NoteService noteService;
 
     private final static Logger logger = LoggerFactory.getLogger(PatientNoteController.class);
 
@@ -42,6 +40,7 @@ public class PatientNoteController {
 
         // Refers to update note's pop up
         model.addAttribute("noteToUpdate", new Note());
+        //patient-notes objects have to all be filled (fields are related to Pop-up => noteToUpdate)
         return "patient-notes";
     }
 
@@ -122,23 +121,6 @@ public class PatientNoteController {
         return "redirect:/patient/" + id + "/notes";
     }
 
-//    // Pop UP endpoint on notes list
-//    @GetMapping("/{id}/notes/get/{noteId}")
-//    @ResponseBody
-//    public Note getNoteForEdit(@PathVariable("id") Long id,
-//                               @PathVariable("noteId") String noteId) {
-//
-//        ResponseEntity<Note> response = notesFeignClient.getNoteById(noteId);
-//        if(response.getBody() != null){
-//            Note note = response.getBody();
-//            logger.info("Note ID : {}", note.getId());
-//            logger.info("Note content : {}", note.getContent());
-//            logger.info("Note date : {}", note.getCreationDate());
-//        return note;
-//        }else{
-//           throw new RuntimeException("Note not found with ID : " + noteId);
-//        }
-//    }
 
 
 }
