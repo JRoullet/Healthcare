@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public class NoteDto {
     private String id;
     private LocalDate creationDate;
+    private LocalDate lastUpdateDate;
     private String content;
     private Long patientId;
 }

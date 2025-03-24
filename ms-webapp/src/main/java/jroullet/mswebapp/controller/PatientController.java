@@ -1,10 +1,8 @@
 package jroullet.mswebapp.controller;
 
-import jroullet.mswebapp.clients.NotesFeignClient;
 import jroullet.mswebapp.clients.PatientFeignClient;
 import jroullet.mswebapp.dto.PatientId;
 import jroullet.mswebapp.model.Patient;
-import jroullet.mswebapp.service.SessionService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +16,8 @@ import org.springframework.web.bind.annotation.*;
 public class PatientController {
 
     private final PatientFeignClient patientFeignClient;
-    private final SessionService sessionService;
     private final static Logger logger = LoggerFactory.getLogger(PatientController.class);
-    private final NotesFeignClient notesFeignClient;
+
 
     @GetMapping("/new")
     public String showAddPatientForm(Model model) {
@@ -46,6 +43,13 @@ public class PatientController {
         if (patient == null) {
             throw new RuntimeException("Patient not found with ID : " + id);
         }
+
+//        // Format date for display
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//        String formattedBirthday = patient.getBirthday().format(formatter);
+//
+//        // Add it to form
+//        model.addAttribute("formattedBirthday", formattedBirthday);
         model.addAttribute("patient", patient);
         return "update-patient";
     }

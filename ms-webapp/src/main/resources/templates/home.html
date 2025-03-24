@@ -67,7 +67,7 @@
                                 <th>Date de naissance</th>
                                 <th>Email</th>
                                 <th>Téléphone</th>
-                                <th>Actions</th>
+                                <th class="text-center col-md-2">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -78,16 +78,15 @@
                                 <td th:text="${patient.birthday}">01/01/1980</td>
                                 <td th:text="${patient.email}">patient@example.com</td>
                                 <td th:text="${patient.phone}">0123456789</td>
-                                <td class="action-buttons">
-                                    <a th:href="@{/patient/{id}(id=${patient.id})}" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-eye"></i> Voir
-                                    </a>
-                                    <a th:href="@{/patient/update/{id} (id=${patient.id})}" class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-edit"></i> Modifier
-                                    </a>
-                                    <a th:href="@{/patient/{id}/notes(id=${patient.id})}" class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-clipboard"></i> Notes
-                                    </a>
+                                <td class="action-buttons col-md-2 text-end">
+                                    <div class="d-flex justify-content-end">
+                                        <a th:href="@{/patient/{id}/notes(id=${patient.id})}" class="btn btn-sm btn-primary me-2">
+                                            <i class="fas fa-eye"></i> Info
+                                        </a>
+                                        <a th:href="@{/patient/update/{id} (id=${patient.id})}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i> Modifier
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                             <!-- Message si pas de patients -->

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -26,7 +27,6 @@ public class HomeController {
         User user = sessionService.sessionUser();
         List<Patient> patients = patientFeignClient.findAll();
         model.addAttribute("patients", patients);
-//        model.addAttribute("patient", new Patient());
         model.addAttribute("user", user);
 
         return "home";

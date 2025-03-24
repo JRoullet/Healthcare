@@ -37,16 +37,24 @@
 </nav>
 
 <div class="container py-4">
-    <div class="welcome-banner">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="h4 mb-0">Notes du patient</h1>
-                <p class="mb-0">Gérez les notes médicales du patient</p>
-            </div>
-            <div class="col-md-4 text-end">
-                <a th:href="@{/patient/{id}/notes/add(id=${patientId})}" class="btn btn-primary">
-                    Ajouter une note
-                </a>
+    <div class="container py-4">
+        <div class="welcome-banner">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="h4 fw-bold mb-1" th:text="${patient.firstName} + ' ' + ${patient.lastName}"></h1>
+                    <small class="text-muted fw-semibold text-secondary" th:text="${#temporals.format(patient.birthday, 'dd/MM/yyyy')}"></small>
+                    <p class="text-muted text-secondary mb-0 " th:text="${patient.email}"></p>
+                </div>
+                <div class="col-md-4 d-flex justify-content-end">
+                    <div class=" d-flex align-items-end flex-column">
+                        <a th:href="@{/patient/{id}/notes/add(id=${patientId})}" class="btn btn-primary mb-2">
+                            Ajouter une note
+                        </a>
+                        <a th:href="@{/home}" class="btn btn-info text-white">
+                            Liste des patients
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -56,14 +64,13 @@
             <div class="card">
                 <div class="card-body p-0">
                     <h5 class="card-title p-3 mb-0 border-bottom">Liste des notes</h5>
-
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
                             <thead>
                             <tr>
                                 <th>Date de création</th>
                                 <th>Contenu de la note</th>
-                                <th>Actions</th>
+                                <th class="text-center col-md-2">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -71,13 +78,18 @@
                             <tr th:each="note : ${notes}" th:if="${notes != null}">
                                 <td th:text="${note.creationDate}">Date de création</td>
                                 <td th:text="${note.content}">Contenu de la note</td>
-                                <td class="action-buttons">
-                                    <a th:href="@{/patient/{patientId}/notes/update/{noteId}(patientId=${patientId}, noteId=${note.id})}" class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-edit"></i> Modifier
-                                    </a>
-                                    <a th:href="@{/patient/{patientId}/notes/delete/{noteId}(patientId=${patientId}, noteId=${note.id})}" class="btn btn-sm btn-outline-danger">
-                                        <i class="fas fa-trash"></i> Supprimer
-                                    </a>
+                                <td class="action-buttons col-md-2 text-end">
+                                    <div class="d-flex justify-content-end">
+                                        <a th:href="@{/patient/{id}/notes/update/{noteId}(id=${patientId}, noteId=${note.id})}" class="btn btn-sm btn-outline-primary edit-note-btn"
+                                           th:data-note-id="${note.id}"
+                                           th:data-patient-id="${patientId}">
+                                            <i class="fas fa-edit"></i> Modifier
+                                        </a>
+                                        <a th:href="@{/patient/{id}/notes/delete/{noteId}(id=${patientId}, noteId=${note.id})}"
+                                           class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash"></i> Supprimer
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                             <!-- Message si pas de notes -->
@@ -94,6 +106,44 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="editNoteModal" tabindex="-1" aria-labelledby="editNoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editNoteModalLabel">Modifier la note</h5>
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateNoteForm"
+                      method="post"
+                      class="needs-validation"
+                      th:object="${noteToUpdate}"
+                      th:action="@{'/patient/' + ${patientId} + '/notes/update/' + ${noteToUpdate.id}}"
+                      novalidate>
+                    <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="contentModal" class="form-label">Contenu de la note</label>
+                            <textarea th:field="*{content}" class="form-control" id="contentModal" name="content" rows="3" required></textarea>
+                            <div class="invalid-feedback">
+                                Veuillez modifier le contenu de la note.
+                            </div>
+                        </div>
+
+                        <input type="hidden" th:field="*{creationDate}" id="creationDateHidden" />
+                        <input type="hidden" th:field="*{id}" />
+                        <input type="hidden" th:field="*{patientId}" th:value="${patientId}" />
+
+                        <div class="d-flex justify-content-end mt-2">
+                            <button type="button" class="btn btn-outline-secondary me-2" data-mdb-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <footer class="py-3 mt-5 bg-white border-top">
     <div class="container">
@@ -102,5 +152,21 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
+
+<!--Displaying Modal / Pop Up, keep every line here and IDE errors are OK-->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const shouldOpen = [[${openModal} ?: false]];
+        console.log(">> openModal =", shouldOpen); // 💡 à vérifier dans la console navigateur
+        if (shouldOpen) {
+            const modalElement = document.getElementById('editNoteModal');
+            const modalInstance = new mdb.Modal(modalElement);
+            modalInstance.show();
+        }
+    });
+    /*]]>*/
+</script>
+
 </body>
 </html>

@@ -1,8 +1,6 @@
 package jroullet.mspatient.service;
 
-import jroullet.mspatient.client.NotesFeignClient;
 import jroullet.mspatient.model.Patient;
-import jroullet.mspatient.model.dto.NoteDto;
 import jroullet.mspatient.model.dto.PatientId;
 import jroullet.mspatient.repository.PatientRepository;
 import org.slf4j.Logger;
@@ -10,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,13 +17,10 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
 
-    private final NotesFeignClient notesFeignClient;
-
     private final static Logger logger = LoggerFactory.getLogger(PatientService.class.getName());
 
-    public PatientService(PatientRepository patientRepository, NotesFeignClient notesFeignClient) {
+    public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
-        this.notesFeignClient = notesFeignClient;
     }
 
 
@@ -99,15 +92,14 @@ public class PatientService {
         return patientRepository.findAll();
     }
 
-    public List<NoteDto> getNotesByPatientId(@PathVariable Long patientId) {
-        return notesFeignClient.getNotesByPatientId(patientId);
-    }
-
-    public NoteDto addNoteToPatient(@PathVariable Long patientId, @RequestBody NoteDto noteDto) {
-        noteDto.setPatientId(patientId);
-        return notesFeignClient.createNote(noteDto);
-    }
-
+//    public List<NoteDto> getNotesByPatientId(@PathVariable Long patientId) {
+//        return notesFeignClient.getNotesByPatientId(patientId);
+//    }
+//
+//    public NoteDto addNoteToPatient(@PathVariable Long patientId, @RequestBody NoteDto noteDto) {
+//        noteDto.setPatientId(patientId);
+//        return notesFeignClient.createNote(noteDto);
+//    }
 
 
 //    public NoteDto updateNoteToPatient(@PathVariable Long id, @PathVariable String noteId, @RequestBody NoteDto noteDto) {
