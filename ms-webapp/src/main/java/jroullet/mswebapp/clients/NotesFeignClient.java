@@ -9,27 +9,36 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @FeignClient(name="ms-notes")
-@RequestMapping("/notes")
+
 public interface NotesFeignClient {
 
     // Read all notes for a patient
-    @GetMapping("/patient/{patientId}/all")
+    @GetMapping("/notes/patient/{patientId}/all")
     List<Note> getNotesByPatientId(@PathVariable Long patientId);
 
     //Read one note
-    @GetMapping("/get/{id}")
+    @GetMapping("/notes/get/{id}")
     ResponseEntity<Note> getNoteById(@PathVariable String id);
 
-    // Add note
-    @PostMapping("/add")
-    ResponseEntity<Note> createNote(@RequestBody Note note);
+
+//    [HTML Formulaire] (Thymeleaf)
+//            ⬇️ POST in x-www-form-urlencoded
+//[Spring WebApp Controller] (@ModelAttribute)
+//            ⬇️ Feign → POST JSON
+//[Microservice Notes] (@RequestBody, consumes = application/json)
+
+    // Add note -- between microservices, annotation consumes = "application/json" is essential, otherwise server expects x-www-form-urlencoded
+    @PostMapping(value = "/notes/add", consumes = "application/json")
+    ResponseEntity<Note> createNote(@RequestBody NoteDto noteDto);
 
     //Update note
-    @PutMapping("/update")
-    ResponseEntity<Note> updateNote(@RequestBody Note note);
+    @PostMapping(value = "/notes/update/{id}", consumes = "application/json")
+    ResponseEntity<Note> updateNote(@PathVariable String id,
+                                    @RequestBody Note note);
+
 
     //Delete note
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/notes/delete/{id}")
     ResponseEntity<String> deleteNote(@PathVariable String id);
 
 

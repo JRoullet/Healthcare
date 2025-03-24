@@ -37,7 +37,6 @@ public class NoteService {
         return note.orElseThrow(() -> new IllegalArgumentException("Note not found"));
     }
 
-
     public Boolean updateNoteById(Note updatedNote) {
         if(updatedNote == null) {
             throw new IllegalArgumentException("Note cannot be null");
@@ -51,7 +50,7 @@ public class NoteService {
                 Note existingNote = existingNoteOpt.get();
                 // Avoid code repetition and copy each property of updated patient to existing patient, except id (ignored)
                 BeanUtils.copyProperties(updatedNote, existingNote, "id");
-
+                existingNote.setLastUpdateDate(LocalDate.now());
                 noteRepository.save(existingNote);
                 logger.info("Note Updated");
                 return true;
@@ -72,6 +71,4 @@ public class NoteService {
         noteRepository.delete(note);
         logger.info("Note Deleted");
     }
-
-
 }

@@ -70,7 +70,8 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="birthday" class="form-label">Date de naissance</label>
-                                <input type="date" class="form-control" id="birthday" th:field="*{birthday}" required>
+                                <input type="date" class="form-control" id="birthday" name="birthday" th:value="${#temporals.format(patient.birthday,'yyyy-MM-dd')}" required>
+<!--                                <input type="date" class="form-control" id="birthday" name="birthday" th:value="${formattedBirthday}" th:field="*{birthday}" required>-->
                                 <div class="invalid-feedback">
                                     Veuillez sélectionner la date de naissance.
                                 </div>

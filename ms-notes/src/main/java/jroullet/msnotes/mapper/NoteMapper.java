@@ -19,7 +19,7 @@ public class NoteMapper {
 
     public NoteDto toDTO(Note note) {
         NoteDto noteDTO = new NoteDto();
-        noteDTO.setId(note.getId().toString());
+        noteDTO.setId(note.getId());
         noteDTO.setContent(note.getContent());
         noteDTO.setPatientId(note.getPatientId());
         noteDTO.setCreationDate(note.getCreationDate());
