@@ -1,13 +1,13 @@
-package jroullet.msnotes;
+package jroullet.msdiabete;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MsNotesApplicationTests {
+class MsDiabeteApplicationTests {
 
-//	@Test
-//	void contextLoads() {
-//	}
+    @Test
+    void contextLoads() {
+    }
 
 }

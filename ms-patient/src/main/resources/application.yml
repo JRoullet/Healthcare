@@ -1,39 +1,39 @@
-server:
-  port: 8070
-spring:
-  application:
-    name: "ms-patient"
-  profiles:
-    active: "prod"
-  datasource:
-    url: jdbc:mysql://localhost:3308/patientdb
-    username: "root"
-    password: "root"
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-  sql:
-    init:
-      mode: always
-  config:
-    import: configserver:http://localhost:8888/
-
-#-----------EUREKA----------------
-#--------------Eureka Server----------------
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
-
-#-----------Actuator----------------
-#Will be used into docker-compose to pass the healthcheck step, service can now be pinged
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
+#server:
+#  port: 8070
+#spring:
+#  application:
+#    name: "ms-patient"
+#  profiles:
+#    active: prod
+#  datasource:
+#    url: jdbc:mysql://localhost:3308/patientdb
+#    username: "root"
+#    password: "root"
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#    show-sql: true
+#    database-platform: org.hibernate.dialect.MySQL8Dialect
+#  sql:
+#    init:
+#      mode: always
+#  config:
+#    import: configserver:http://localhost:8888/
+#
+##-----------EUREKA----------------
+##--------------Eureka Server----------------
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+#
+##-----------Actuator----------------
+##Will be used into docker-compose to pass the healthcheck step, service can now be pinged
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"

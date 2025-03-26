@@ -49,7 +49,9 @@ public class NoteService {
             if(existingNoteOpt.isPresent()) {
                 Note existingNote = existingNoteOpt.get();
                 // Avoid code repetition and copy each property of updated patient to existing patient, except id (ignored)
-                BeanUtils.copyProperties(updatedNote, existingNote, "id");
+//                CHECK IF WORKING
+                BeanUtils.copyProperties(updatedNote, existingNote, "id","creationDate");
+                existingNote.setCreationDate(existingNote.getCreationDate());
                 existingNote.setLastUpdateDate(LocalDate.now());
                 noteRepository.save(existingNote);
                 logger.info("Note Updated");

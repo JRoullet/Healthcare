@@ -47,5 +47,11 @@ services:
 
   microservice-mongo-config:
     extends:
-      service:
-        network-deploy-service
+      service: network-deploy-service
+    image: mongo
+    healthcheck:
+      test: ["CMD", "mongosh", "admin", "--username=root", "--password=123", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
