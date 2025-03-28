@@ -71,9 +71,6 @@
 						<image>jroullet/healthcare-${project.artifactId}</image>
 					</to>
 					<container>
-						<environment>
-							<SPRING_PROFILES_ACTIVE>docker</SPRING_PROFILES_ACTIVE>
-						</environment>
 						<creationTime>USE_CURRENT_TIMESTAMP</creationTime>
 					</container>
 				</configuration>

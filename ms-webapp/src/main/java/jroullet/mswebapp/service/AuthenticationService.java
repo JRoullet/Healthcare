@@ -2,6 +2,7 @@ package jroullet.mswebapp.service;
 
 import feign.FeignException;
 import jroullet.mswebapp.clients.PatientFeignClient;
+import jroullet.mswebapp.dto.UsernameDto;
 import jroullet.mswebapp.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,7 @@ public class AuthenticationService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
             // Retrieve user from microservice
-            User user = patientFeignClient.findUserByUsername(username);
+            User user = patientFeignClient.findUserByUsername(new UsernameDto(username));
             if (user == null) {
                 throw new UsernameNotFoundException("User not found: " + username);
             }

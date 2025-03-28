@@ -1,7 +1,6 @@
 package jroullet.mswebapp.controller;
 
 import jroullet.mswebapp.clients.PatientFeignClient;
-import jroullet.mswebapp.dto.PatientId;
 import jroullet.mswebapp.model.Patient;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -37,9 +36,7 @@ public class PatientController {
 
     @GetMapping("/update/{id}")
     public String showUpdatePatientForm(@PathVariable("id") Long id, Model model) {
-        PatientId patientId = new PatientId();
-        patientId.setId(id);
-        Patient patient = patientFeignClient.getPatientById(patientId);
+        Patient patient = patientFeignClient.getPatientById(id);
         if (patient == null) {
             throw new RuntimeException("Patient not found with ID : " + id);
         }

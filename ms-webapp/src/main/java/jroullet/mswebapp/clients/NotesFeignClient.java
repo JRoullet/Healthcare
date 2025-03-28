@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @FeignClient(name="ms-notes")
-
 public interface NotesFeignClient {
 
     // Read all notes for a patient

@@ -1,7 +1,6 @@
 package jroullet.mswebapp.clients;
 
-import jroullet.mswebapp.dto.NoteDto;
-import jroullet.mswebapp.dto.PatientId;
+import jroullet.mswebapp.dto.UsernameDto;
 import jroullet.mswebapp.model.Patient;
 import jroullet.mswebapp.model.User;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -17,8 +16,8 @@ public interface PatientFeignClient {
         List<Patient> findAll();
 
         //Find
-        @PostMapping(value = "/patient/get", consumes = "application/json")
-        Patient getPatientById(@RequestBody PatientId patientId);
+        @GetMapping(value = "/patient/get/{id}", consumes = "application/json")
+        Patient getPatientById(@PathVariable Long id);
 
         //Create
         @PostMapping(value = "/patient/new", consumes = "application/json")
@@ -30,7 +29,7 @@ public interface PatientFeignClient {
 
     // USER
         @PostMapping(value= "/user/get", consumes = "application/json")
-        User findUserByUsername(@RequestBody String username);
+        User findUserByUsername(@RequestBody UsernameDto usernameDto);
 
         @PostMapping(value = "/user/create", consumes = "application/json")
         User createUser(@RequestBody User user);

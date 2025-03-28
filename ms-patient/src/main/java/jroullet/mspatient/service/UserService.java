@@ -1,6 +1,8 @@
 package jroullet.mspatient.service;
 
 import jroullet.mspatient.model.User;
+import jroullet.mspatient.model.dto.UserPatchDto;
+import jroullet.mspatient.model.dto.UsernameDto;
 import jroullet.mspatient.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,20 +22,15 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<User> findByUsername(String username) {
-        logger.info("findByUserName: " + username);
-        try {
-            Optional<User> existingUser = userRepository.findByUsername(username);
-            if (existingUser.isPresent()) {
+    public Optional<User> findByUsername(UsernameDto usernameDto) {
+        logger.info("findByUserName: " + usernameDto);
+        Optional<User> existingUser = userRepository.findByUsername(usernameDto.getUsername());
+        if (existingUser.isPresent()) {
                 logger.info("User found");
                 return existingUser;
-            }
         }
-        catch(Exception e){
-            logger.error("Error while finding user: " + username, e);
-            throw e;
-            }
-        return Optional.empty();
+        logger.error("Error while finding user: {}", usernameDto.getUsername());
+    return Optional.empty();
     }
 
     public User createUser(User user) {
@@ -41,16 +38,26 @@ public class UserService {
        return user;
     }
 
-    public Boolean updateUser(User updatedUser) {
-        Optional<User> user = userRepository.findByUsername(updatedUser.getUsername());
-        if (user.isPresent()) {
-            User existingUser = user.get();
-            existingUser.setUsername(updatedUser.getUsername());
-            existingUser.setPassword(updatedUser.getPassword());
-            existingUser.setRole(updatedUser.getRole());
-            userRepository.save(existingUser);
-            return true;
-        }
-        return false;
+//    public Boolean updateUser(User user) {
+//        Optional<User> existingOpt = userRepository.findByUsername(user.getUsername());
+//        if (existingOpt.isPresent()) {
+//            Long existingId = existingOpt.get().getId();
+//            user.setId(existingId);
+//
+//            userRepository.save(user);
+//            return true;
+//        }
+//        return false;
+//    }
+
+
+    public Optional<User> patchUserDto(UserPatchDto dto) {
+        return userRepository.findByUsername(dto.getUsername())
+                .map(user -> {
+                    if (dto.getPassword() != null) user.setPassword(dto.getPassword());
+                    if (dto.getRole() != null) user.setRole(dto.getRole());
+                    return userRepository.save(user);
+                });
     }
+
 }

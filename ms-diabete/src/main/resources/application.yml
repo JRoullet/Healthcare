@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: ms-diabete
+
+server:
+  port: 9010

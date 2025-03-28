@@ -1,11 +1,13 @@
 package jroullet.mswebapp.controller;
 
+import jroullet.mswebapp.clients.DiabeteFeignClient;
 import jroullet.mswebapp.clients.NotesFeignClient;
 import jroullet.mswebapp.clients.PatientFeignClient;
 import jroullet.mswebapp.dto.NoteDto;
-import jroullet.mswebapp.dto.PatientId;
 import jroullet.mswebapp.model.Note;
 import jroullet.mswebapp.model.Patient;
+import jroullet.mswebapp.model.RiskLevel;
+import jroullet.mswebapp.utility.RiskLevelStyleUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +26,35 @@ public class PatientNoteController {
     NotesFeignClient notesFeignClient;
     @Autowired
     private PatientFeignClient patientFeignClient;
+    @Autowired
+    private DiabeteFeignClient diabeteFeignClient;
 
     private final static Logger logger = LoggerFactory.getLogger(PatientNoteController.class);
+
 
     // Show List of notes
     @GetMapping("/{id}/notes")
     public String getNotesByPatientId(@PathVariable Long id, Model model) {
         List<Note> notes = notesFeignClient.getNotesByPatientId(id);
-        PatientId patientId = new PatientId();
-        patientId.setId(id);
-        Patient patient = patientFeignClient.getPatientById(patientId);
+        Patient patient = patientFeignClient.getPatientById(id);
+        RiskLevel riskLevel;
+        try {
+            riskLevel = diabeteFeignClient.determineRiskLevel(id);
+        } catch (Exception e) {
+            logger.warn("Unable to retrieve risk level for patient {}: {}", id, e.getMessage());
+            riskLevel = RiskLevel.NONE; // default fallBack
+        }
+
+        // Mapping a css style to risk level
+        String cssClass = RiskLevelStyleUtil.getCssClass(riskLevel);
+
         model.addAttribute("patient", patient);
         model.addAttribute("notes", notes);
         model.addAttribute("patientId", id);
+        // Risk displaying
+        model.addAttribute("riskLevel", riskLevel.getLabel());
+        // Mapping css class
+        model.addAttribute("riskClass", cssClass);
 
         // Refers to update note's pop up
         model.addAttribute("noteToUpdate", new Note());
@@ -69,10 +87,7 @@ public class PatientNoteController {
     @GetMapping ("/{id}/notes/update/{noteId}")
     public String showUpdateNoteToPatientForm(@PathVariable("id") Long id, @PathVariable("noteId") String noteId, Model model) {
         System.out.println(">> [DEBUG] GET /notes/update called with noteId = " + noteId);
-        PatientId patientId = new PatientId();
-        // Convert Long id to patientId
-        patientId.setId(id);
-        Patient patient = patientFeignClient.getPatientById(patientId);
+        Patient patient = patientFeignClient.getPatientById(id);
         if(patient == null){
             throw new RuntimeException("Patient not found with ID : " + id);
         }

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jroullet.mswebapp.clients.PatientFeignClient;
 import jroullet.mswebapp.dto.SignUpForm;
+import jroullet.mswebapp.dto.UsernameDto;
 import jroullet.mswebapp.model.User;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -24,7 +25,7 @@ public class UserService {
     private final PatientFeignClient patientFeignClient;
     private final static Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public Optional<User> findByUserName(String username){
+    public Optional<User> findByUserName(UsernameDto username){
         logger.info("findByUserName: " + username);
         try{
             User user = patientFeignClient.findUserByUsername(username);
@@ -45,7 +46,7 @@ public class UserService {
     public User registration(SignUpForm form){
 
         try{
-            Optional<User> existingUser = findByUserName(form.getUsername());
+            Optional<User> existingUser = findByUserName(new UsernameDto(form.getUsername()));
             if(existingUser.isPresent()){
                 logger.info("User already exists: " + existingUser);
                 throw new RuntimeException("Email already exists");

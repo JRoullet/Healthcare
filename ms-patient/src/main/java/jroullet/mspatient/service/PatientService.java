@@ -1,7 +1,6 @@
 package jroullet.mspatient.service;
 
 import jroullet.mspatient.model.Patient;
-import jroullet.mspatient.model.dto.PatientId;
 import jroullet.mspatient.repository.PatientRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,11 +79,7 @@ public class PatientService {
 
     }
     //PostMapping (PatientId)
-    public Optional<Patient> findPatientById(PatientId patientId) {
-        return patientRepository.findById(patientId.getId());
-    }
-    // GetMapping (Long id)
-    public Optional<Patient> getPatientById(Long id) {
+    public Optional<Patient> findPatientById(Long id) {
         return patientRepository.findById(id);
     }
 

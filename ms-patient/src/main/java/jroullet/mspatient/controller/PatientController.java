@@ -1,8 +1,6 @@
 package jroullet.mspatient.controller;
 
 import jroullet.mspatient.model.Patient;
-import jroullet.mspatient.model.dto.NoteDto;
-import jroullet.mspatient.model.dto.PatientId;
 import jroullet.mspatient.service.PatientService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -34,15 +32,15 @@ public class PatientController {
         return new ResponseEntity<>(createdPatient, HttpStatus.CREATED);
     }
 
-    // Read Patient (PostMapping PatientId DTO)
-    @PostMapping("/get")
-    public ResponseEntity<?> getPatientById(@RequestBody PatientId patientId) {
-        Optional<Patient> patient = patientService.findPatientById(patientId);
+    // Read Patient
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> getPatientById(@PathVariable Long id) {
+        Optional<Patient> patient = patientService.findPatientById(id);
         if(patient.isPresent()) {
-            logger.info("Patient {} found", patientId.getId());
+            logger.info("Patient {} found", id);
             return new ResponseEntity<>(patient.get(), HttpStatus.OK);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient with id " + patientId.getId() + " not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient with id " + id + " not found");
     }
 
     // Update Patient

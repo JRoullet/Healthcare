@@ -25,9 +25,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/patient/new">Ajouter un patient</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/patient-notes">Notes</a>
-                </li>
             </ul>
             <div class="d-flex align-items-center">
                 <button type="button" class="btn btn-outline-primary" onclick="window.location.href='/logout'">Déconnexion</button>
@@ -40,10 +37,19 @@
     <div class="container py-4">
         <div class="welcome-banner">
             <div class="row align-items-center">
-                <div class="col-md-8">
+                <div class="col-md-4">
                     <h1 class="h4 fw-bold mb-1" th:text="${patient.firstName} + ' ' + ${patient.lastName}"></h1>
                     <small class="text-muted fw-semibold text-secondary" th:text="${#temporals.format(patient.birthday, 'dd/MM/yyyy')}"></small>
                     <p class="text-muted text-secondary mb-0 " th:text="${patient.email}"></p>
+                </div>
+                <div th:if="${riskLevel != null}" class="col-md-4 d-flex justify-content-center my-3">
+<!--                    classappend injects style : class = " internal value of our riskClass" -->
+                    <div class="card text-white text-center" th:classappend="${riskClass}">
+                        <div class="card-body">
+                            <h5 class="card-title mb-1">Niveau de risque</h5>
+                            <p class="h4 fw-bold mb-0" th:text="${riskLevel}">IN_DANGER</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-4 d-flex justify-content-end">
                     <div class=" d-flex align-items-end flex-column">
@@ -126,7 +132,7 @@
                       th:action="@{'/patient/' + ${patientId} + '/notes/update/' + ${noteToUpdate.id}}"
                       novalidate>
 <!--                    CSRF has to be disabled between microservices (where authentication is already verified)-->
-                    <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+<!--                    <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <label for="contentModal" class="form-label">Contenu de la note</label>

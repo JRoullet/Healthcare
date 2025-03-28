@@ -6,6 +6,27 @@
     --text: #333333;
 }
 
+.risk-none {
+    background-color: var(--primary);
+    color: white;
+}
+
+.risk-borderline {
+    background-color: orange;
+    color: white;
+}
+
+.risk-danger {
+    background-color: red;
+    color: white;
+}
+
+.risk-early-onset {
+    background-color: purple;
+    color: white;
+}
+
+
 body {
     display: flex;
     flex-direction: column;

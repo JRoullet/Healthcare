@@ -2,6 +2,7 @@ package jroullet.mswebapp.service;
 
 
 import jroullet.mswebapp.clients.PatientFeignClient;
+import jroullet.mswebapp.dto.UsernameDto;
 import jroullet.mswebapp.model.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,6 @@ public class SessionService {
     public User sessionUser() {
         org.springframework.security.core.userdetails.User springUser =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return patientFeignClient.findUserByUsername(springUser.getUsername());
+        return patientFeignClient.findUserByUsername(new UsernameDto(springUser.getUsername()));
     }
 }

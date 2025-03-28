@@ -25,9 +25,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/patient/new">Ajouter un patient</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/patient-notes">Notes</a>
-                </li>
             </ul>
             <div class="d-flex align-items-center">
                 <span class="me-3" th:if="${user != null}" th:text="${user.getUsername()}"></span>
@@ -65,6 +62,7 @@
                                 <th>Nom</th>
                                 <th>Prénom</th>
                                 <th>Date de naissance</th>
+                                <th>Sexe</th>
                                 <th>Email</th>
                                 <th>Téléphone</th>
                                 <th class="text-center col-md-2">Actions</th>
@@ -76,6 +74,7 @@
                                 <td th:text="${patient.lastName}">Nom</td>
                                 <td th:text="${patient.firstName}">Prénom</td>
                                 <td th:text="${patient.birthday}">01/01/1980</td>
+                                <td th:text="${patient.gender}">H</td>
                                 <td th:text="${patient.email}">patient@example.com</td>
                                 <td th:text="${patient.phone}">0123456789</td>
                                 <td class="action-buttons col-md-2 text-end">

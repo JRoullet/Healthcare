@@ -25,9 +25,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/patient/new">Ajouter un patient</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/patient-notes">Notes</a>
-                </li>
             </ul>
             <div class="d-flex align-items-center">
                 <span class="me-3" th:if="${user != null}" th:text="${user.getUsername()}"></span>
@@ -37,7 +34,7 @@
     </div>
 </nav>
 
-<div class="container py-4">
+<main class="container py-4">
     <div class="page-header">
         <h1 class="h4 mb-0">Add patient</h1>
         <p class="mb-0">Remplissez le formulaire ci-dessous pour ajouter un nouveau patient</p>
@@ -56,16 +53,17 @@
                                     Veuillez entrer le contenu de la note.
                                 </div>
                             </div>
-                        <div class="d-flex justify-content-end mt-4">
-                            <a href="/home" class="btn btn-outline-secondary me-2">Annuler</a>
-                            <button type="submit" class="btn btn-primary">Ajouter la note</button>
+                            <div class="d-flex justify-content-end mt-4">
+                                <a th:href="@{/patient/{id}/notes(id=${patientId})}" class="btn btn-outline-secondary me-2">Annuler</a>
+                                <button type="submit" class="btn btn-primary">Ajouter la note</button>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</main>
 
 <footer class="py-3 mt-5 bg-white border-top">
     <div class="container">

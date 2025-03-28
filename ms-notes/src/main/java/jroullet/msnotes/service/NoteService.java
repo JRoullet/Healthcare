@@ -1,11 +1,8 @@
 package jroullet.msnotes.service;
 
-import jroullet.msnotes.dto.NoteId;
-import jroullet.msnotes.dto.PatientId;
 import jroullet.msnotes.model.Note;
 import jroullet.msnotes.repository.NoteRepository;
 import lombok.AllArgsConstructor;
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
