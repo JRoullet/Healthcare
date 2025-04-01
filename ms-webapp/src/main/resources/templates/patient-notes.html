@@ -6,6 +6,8 @@
     <title>Notes du patient | HealthCare</title>
     <link th:href="@{/css/mdb.min.css}" rel="stylesheet"/>
     <link th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <script th:src="@{/js/modal.js}"></script>
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg">
@@ -168,17 +170,12 @@
 <!--Displaying Modal / Pop Up, keep every line here and IDE errors are OK-->
 <script th:inline="javascript">
     /*<![CDATA[*/
-    document.addEventListener('DOMContentLoaded', function () {
-        const shouldOpen = [[${openModal} ?: false]];
-        console.log(">> openModal =", shouldOpen); // 💡 à vérifier dans la console navigateur
-        if (shouldOpen) {
-            const modalElement = document.getElementById('editNoteModal');
-            const modalInstance = new mdb.Modal(modalElement);
-            modalInstance.show();
-        }
-    });
+    window.shouldOpenModal = [[${openModal} ?: false]];
     /*]]>*/
 </script>
+
+<script th:src="@{/js/custom.js}"></script>
+
 
 </body>
 </html>
